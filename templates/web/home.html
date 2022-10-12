@@ -1,20 +1,52 @@
 {% extends "web/base.html" %}
 {% load static %}
+{% load my_tags %}
 
 
 {% block content %}
     <body>
     <form method="get">
         {{ filter.form.title }}
+        {{ filter.form.category }}
         <input type="submit"/>
     </form>
-    {% for good in goods %}
-        {% if good.image %}
-            <p><img src="{{good.image.url}}"/></p>
-        {% endif %}
-        <h4>{{ good.title }}</h4>
-        {{ good.price }}
-    {% endfor %}
+    <section id="trending">
+        {% for good in goods %}
+            <div class="grid">
+                {% if good.image %}
+                    <p><img src="{{ good.image.url }}" width="300" height="250"/></p>
+                {% endif %}
+                <h4>{{ good.title }}</h4>
+                {{ good.category }}:
+                {{ good.price }}
+            </div>
+
+        {% endfor %}
+    </section>
+    <nav class="list-pages">
+        <ul>
+            {% if page_obj.has_previous %}
+                <li class="page-num">
+                    <a href="?{% param_replace page=1 %}">&lt;</a>
+                </li>
+            {% endif %}
+            {% for p in paginator.page_range %}
+                {% if page_obj.number == p %}
+                    <li class="page-num page-num-selected">{{ p }}</li>
+                {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                    <li class="page-num">
+                        <a href="?{% param_replace page=p %}">{{ p }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-num">
+                    <a href="?{% param_replace page=paginator.num_pages %}">&gt;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
     </body>
 {% endblock content %}
 </html>
