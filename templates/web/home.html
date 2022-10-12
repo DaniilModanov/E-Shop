@@ -1,0 +1,20 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <body>
+    <form method="get">
+        {{ filter.form.title }}
+        <input type="submit"/>
+    </form>
+    {% for good in goods %}
+        {% if good.image %}
+            <p><img src="{{good.image.url}}"/></p>
+        {% endif %}
+        <h4>{{ good.title }}</h4>
+        {{ good.price }}
+    {% endfor %}
+    </body>
+{% endblock content %}
+</html>
